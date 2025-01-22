@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://dd84sd27dtpd8"]
+
+[ext_resource type="Texture2D" uid="uid://i85gmrxxr5o3" path="res://sprites/Sol-III.png" id="1_4besh"]
+[ext_resource type="Script" path="res://main.gd" id="1_y0amh"]
+[ext_resource type="PackedScene" uid="uid://bbgbtysnt13nu" path="res://tower.tscn" id="2_lp1c8"]
+[ext_resource type="Texture2D" uid="uid://b8qiqjuxgetq2" path="res://sprites/Checkpoint.png" id="4_uwusc"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_y0amh")
+
+[node name="Sol-iii" type="Sprite2D" parent="."]
+position = Vector2(2301, 1302)
+scale = Vector2(0.148828, 0.148828)
+texture = ExtResource("1_4besh")
+
+[node name="Tower" parent="." instance=ExtResource("2_lp1c8")]
+position = Vector2(2414, 1156)
+
+[node name="Tower2" parent="." instance=ExtResource("2_lp1c8")]
+position = Vector2(2230, 1116)
+
+[node name="Tower3" parent="." instance=ExtResource("2_lp1c8")]
+position = Vector2(2128, 1277)
+
+[node name="Checkpoint" type="Sprite2D" parent="."]
+texture = ExtResource("4_uwusc")
+
+[node name="Checkpoint2" type="Sprite2D" parent="."]
+position = Vector2(1001, 317)
+texture = ExtResource("4_uwusc")
+
+[node name="Checkpoint3" type="Sprite2D" parent="."]
+position = Vector2(1209, 986)
+texture = ExtResource("4_uwusc")
+
+[node name="Checkpoint4" type="Sprite2D" parent="."]
+position = Vector2(2300, 1301)
+texture = ExtResource("4_uwusc")
