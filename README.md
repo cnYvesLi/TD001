@@ -2,5 +2,5 @@
 Using Godot game engine
 
 ## 2025 Jan 22
-Load the program
+Load the program  
 Add enemy pathfinding
