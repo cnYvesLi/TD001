@@ -2,25 +2,27 @@ extends Node2D
 
 var locked_tower = -1
 var time_res = 0
+var energy = 100
 var towers = []  # 创建数组存储所有tower
-var roots = []
-var root1 = []
+var paths = []
+var path1 = []
 var enemy_scene = preload("res://enemies/001.tscn")  # 预加载敌人场景
 var enemies = []  # 存储所有敌人实例的数组
+var energy_label 
 
 # 存储敌人数据的结构体
 class EnemyData:
 	var type: String  # 敌人类型 (例如 "001")
-	var root_index: int  # 路径索引
+	var path_index: int  # 路径索引
 	var spawn_time: float  # 出现时间
 	
 	func _init(t: String, r: int, st: float):
 		type = t
-		root_index = r
+		path_index = r
 		spawn_time = st
 	
 	func _to_string() -> String:
-		return "[Type: %s, Index: %d, Time: %.2f\n]" % [type, root_index, spawn_time]
+		return "[Type: %s, Index: %d, Time: %.2f\n]" % [type, path_index, spawn_time]
 
 var enemies_data = []  # 存储从文件读取的敌人数据
 var enemy_scenes = {
@@ -30,15 +32,22 @@ var enemy_scenes = {
 
 func _ready():
 	# 初始化towers数组
+	energy_label = $Energy
 	towers = [$Tower, $Tower2, $Tower3]
-	root1 = [$Checkpoint, $Checkpoint2, $Checkpoint3, $Checkpoint4]
-	roots.append(root1)
-	for i in range(root1.size()):
-		root1[i].visible = false	
+	path1 = [$Checkpoint, $Checkpoint2, $Checkpoint3, $Checkpoint4]
+	paths.append(path1)
+	for i in range(path1.size()):
+		path1[i].visible = false	
 	# 读取敌人配置文件
 	load_enemy_sequence()
 	time_res = 0
 	print(enemies_data)
+	
+	# 设置背景颜色为黑色
+	RenderingServer.set_default_clear_color(Color(0, 0, 0, 1))
+	
+	# 设置Energy标签的字体大小
+	energy_label.add_theme_font_size_override("font_size", 20)
 
 func _process(delta: float) -> void:
 	time_res += delta
@@ -46,6 +55,9 @@ func _process(delta: float) -> void:
 	change_tower_stage()
 	spawn_enemies()
 	update_enemies_position(delta)  # 添加更新敌人位置的调用
+	
+	# 更新Energy标签的文本
+	energy_label.text = "Energy: " + str(energy)
 
 func locking():
 	for i in range(towers.size()):
@@ -56,6 +68,9 @@ func locking():
 
 func change_tower_stage():
 	for i in range(towers.size()):
+		if towers[i].property < energy:
+			energy = towers[i].property
+		towers[i].property = energy
 		if locked_tower != i + 1 and towers[i].is_chosen:
 			towers[i].is_chosen = false
 			towers[i].stage_close()
@@ -78,34 +93,51 @@ func load_enemy_sequence():
 
 # 更新所有敌人的位置
 func update_enemies_position(delta: float) -> void:
+	# 首先清空所有炮塔的 enemies_in_range
+	for tower in towers:
+		if tower.type:
+			tower.type.enemies_in_range.clear()
+	
 	for enemy in enemies:
-		if enemy.check_point >= roots[enemy.root_index].size():
+		if enemy.check_point >= paths[enemy.path_index].size():
 			continue  # 跳过已经到达终点的敌人
-		var target = roots[enemy.root_index][enemy.check_point].position
+		
+		# 更新到终点的距离
+		var last_checkpoint = paths[enemy.path_index][paths[enemy.path_index].size() - 1]
+		enemy.dis2final = enemy.position.distance_to(last_checkpoint.position)
+		
+		# 检查每个炮塔与敌人的距离
+		for tower in towers:
+			if tower.type:  # 确保炮塔有类型
+				var distance = enemy.position.distance_to(tower.position)
+				if distance <= tower.type.d_range:
+					# 将敌人及其到终点的距离添加到炮塔的检测范围内
+					tower.type.enemies_in_range[enemy] = enemy.dis2final
+		
+		# 原有的移动逻辑
+		var target = paths[enemy.path_index][enemy.check_point].position
 		var direction = target - enemy.position
 		var distance = direction.length()
 		
-		# 如果到达当前检查点
 		if distance <= enemy.speed * delta:
-			enemy.check_point += 1  # 移动到下一个检查点
-			if enemy.check_point < roots[enemy.root_index].size():
-				# 如果还有下一个点，直接设置到当前点的位置
+			enemy.check_point += 1
+			if enemy.check_point < paths[enemy.path_index].size():
 				enemy.position = target
 		else:
-			# 向目标点移动
 			enemy.position += direction.normalized() * enemy.speed * delta
 
 # 生成敌人的函数
 func spawn_enemy(enemy_data: EnemyData):
 	if enemy_scenes.has(enemy_data.type):
-		var enemy = enemy_scenes[enemy_data.type].instantiate()
+		var enemy = preload("res://enemies/enemy.tscn").instantiate()
+		enemy.init_enemy_type(enemy_scenes[enemy_data.type])
 		add_child(enemy)
 		enemies.append(enemy)
 		# 设置敌人的初始属性
-		if enemy_data.root_index < roots.size():
-			enemy.root_index = enemy_data.root_index  # 保存路径索引
+		if enemy_data.path_index < paths.size():
+			enemy.path_index = enemy_data.path_index  # 保存路径索引
 			enemy.check_point = 0  # 初始检查点
-			enemy.position = roots[enemy_data.root_index][0].position
+			enemy.position = paths[enemy_data.path_index][0].position
 
 func spawn_enemies():
 	for i in range(enemies_data.size() - 1, -1, -1):

@@ -6,10 +6,13 @@ var is_locked : bool = false
 var property = 100
 var level = 0
 var acessories = [0, 0, 0]
-# tower_type: LA MI BH GA FJ
+# tower_type: LS MI BH GA FJ
 var tower_type : String = ""
 const price : Array = [1, 1, 1, 1, 1]
 const tower_radius : int = 25
+var LS = [preload("res://towers/LS.tscn")]
+var type
+
 
 func _ready() -> void:
 	$Tower1.visible = false
@@ -31,10 +34,12 @@ func _process(_delta: float):
 	if tower_type == "":
 		is_chosen = !is_chosen
 		if property > price[0] and $Tower1.visible and is_point_in_circle(mouse_pos, $Tower1.position, tower_radius) and Input.is_action_just_pressed("press"):
-			tower_type = "LA"
+			tower_type = "LS"
 			property -= price[0]
 			level += 1
 			quit_tower_board()
+			type = LS[0].instantiate()
+			add_child(type)
 		elif property > price[1] and $Tower2.visible and is_point_in_circle(mouse_pos, $Tower2.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "MI"
 			property -= price[1]
@@ -58,8 +63,8 @@ func _process(_delta: float):
 		else:
 			is_chosen = !is_chosen
 	else:
-		$TowerPositionOpen.visible = true
-		$TowerPositionClosed.visible = true	
+		$TowerPositionOpen.visible = false
+		$TowerPositionClosed.visible = false
 # 添加一个辅助函数来检查点是否在圆形区域内
 func is_point_in_circle(point: Vector2, circle_center: Vector2, radius: float) -> bool:
 	return point.distance_to(circle_center) <= radius

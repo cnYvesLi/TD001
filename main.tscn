@@ -22,7 +22,16 @@ position = Vector2(2230, 1116)
 [node name="Tower3" parent="." instance=ExtResource("2_lp1c8")]
 position = Vector2(2128, 1277)
 
+[node name="Energy" type="Label" parent="."]
+offset_left = 47.0
+offset_top = 21.0
+offset_right = 89.0
+offset_bottom = 75.0
+text = "NULL
+"
+
 [node name="Checkpoint" type="Sprite2D" parent="."]
+position = Vector2(1, 121)
 texture = ExtResource("4_uwusc")
 
 [node name="Checkpoint2" type="Sprite2D" parent="."]

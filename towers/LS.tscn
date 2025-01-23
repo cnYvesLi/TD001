@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://u44wuxfink8y"]
+
+[ext_resource type="Script" path="res://towers/ls.gd" id="1_g7x6i"]
+[ext_resource type="Texture2D" uid="uid://dvoggfme6y8p4" path="res://sprites/LS_L1.png" id="2_ie7bf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mk8r6"]
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_g7x6i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("2_ie7bf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mk8r6")
