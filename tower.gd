@@ -3,7 +3,6 @@ extends Area2D
 var is_chosen : bool = false
 var is_entered : bool = false
 var is_locked : bool = false
-var property = 100
 var level = 0
 var acessories = [0, 0, 0]
 # tower_type: LS MI BH GA FJ
@@ -33,31 +32,32 @@ func _process(_delta: float):
 	# 检测点击各个塔的逻辑
 	if tower_type == "":
 		is_chosen = !is_chosen
+		var property = get_parent().energy
 		if property > price[0] and $Tower1.visible and is_point_in_circle(mouse_pos, $Tower1.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "LS"
-			property -= price[0]
+			get_parent().energy -= price[0]
 			level += 1
 			quit_tower_board()
 			type = LS[0].instantiate()
 			add_child(type)
 		elif property > price[1] and $Tower2.visible and is_point_in_circle(mouse_pos, $Tower2.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "MI"
-			property -= price[1]
+			get_parent().energy -= price[1]
 			level += 1
 			quit_tower_board()
 		elif property > price[2] and $Tower3.visible and is_point_in_circle(mouse_pos, $Tower3.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "BH"
-			property -= price[2]
+			get_parent().energy -= price[2]
 			level += 1
 			quit_tower_board()
 		elif property > price[3] and $Tower4.visible and is_point_in_circle(mouse_pos, $Tower4.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "GA"
-			property -= price[3]
+			get_parent().energy -= price[3]
 			level += 1
 			quit_tower_board()
 		elif property > price[4] and $Tower5.visible and is_point_in_circle(mouse_pos, $Tower5.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "FJ"
-			property -= price[4]
+			get_parent().energy -= price[4]
 			level += 1
 			quit_tower_board()
 		else:

@@ -10,8 +10,6 @@ var ES = 100
 
 func _process(delta: float) -> void:
 	update_bars()
-	HP -= 0.2
-	ES -= 0.1
 	if ES < 0:
 		ES = 0
 	if HP < 0:

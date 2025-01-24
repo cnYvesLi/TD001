@@ -47,7 +47,7 @@ func _ready():
 	RenderingServer.set_default_clear_color(Color(0, 0, 0, 1))
 	
 	# 设置Energy标签的字体大小
-	energy_label.add_theme_font_size_override("font_size", 20)
+	energy_label.add_theme_font_size_override("font_size", 40)
 
 func _process(delta: float) -> void:
 	time_res += delta
@@ -68,9 +68,6 @@ func locking():
 
 func change_tower_stage():
 	for i in range(towers.size()):
-		if towers[i].property < energy:
-			energy = towers[i].property
-		towers[i].property = energy
 		if locked_tower != i + 1 and towers[i].is_chosen:
 			towers[i].is_chosen = false
 			towers[i].stage_close()
