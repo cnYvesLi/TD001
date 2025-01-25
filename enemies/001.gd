@@ -5,3 +5,4 @@ const speed : float = 300
 const damage : float = 10
 const damage_speed : float = 1.0
 const value = 10
+const defensePoint = 1

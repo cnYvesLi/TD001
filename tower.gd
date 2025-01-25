@@ -11,7 +11,7 @@ const price : Array = [1, 1, 1, 1, 1]
 const tower_radius : int = 25
 var LS = [preload("res://towers/LS.tscn")]
 var type
-
+var ui_visible = false  # 新增UI显示状态变量
 
 func _ready() -> void:
 	$Tower1.visible = false
@@ -20,14 +20,22 @@ func _ready() -> void:
 	$Tower4.visible = false
 	$Tower5.visible = false
 	$TowerPositionOpen.visible = false
+	$UI.visible = false  # 初始化时UI不可见
+	$UI.modulate.a = 0.7 # 设置UI透明度为80%
 
 func _process(_delta: float):
-	if is_entered and Input.is_action_just_pressed("press") and !is_locked:
+	if is_entered and Input.is_action_just_pressed("press"):
 		is_chosen = !is_chosen
-		quit_tower_board()
-	if is_chosen:
+		if tower_type == "":
+			# 未建造塔时的原有逻辑
+			quit_tower_board()
+	
+	if is_chosen and tower_type == "":
 		choosing_tower()
-		
+	elif is_chosen and tower_type != "":
+		$UI.visible = true
+	else:
+		$UI.visible = false
 	var mouse_pos = get_local_mouse_position()
 	# 检测点击各个塔的逻辑
 	if tower_type == "":
@@ -40,26 +48,31 @@ func _process(_delta: float):
 			quit_tower_board()
 			type = LS[0].instantiate()
 			add_child(type)
+			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[1] and $Tower2.visible and is_point_in_circle(mouse_pos, $Tower2.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "MI"
 			get_parent().energy -= price[1]
 			level += 1
 			quit_tower_board()
+			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[2] and $Tower3.visible and is_point_in_circle(mouse_pos, $Tower3.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "BH"
 			get_parent().energy -= price[2]
 			level += 1
 			quit_tower_board()
+			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[3] and $Tower4.visible and is_point_in_circle(mouse_pos, $Tower4.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "GA"
 			get_parent().energy -= price[3]
 			level += 1
 			quit_tower_board()
+			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[4] and $Tower5.visible and is_point_in_circle(mouse_pos, $Tower5.position, tower_radius) and Input.is_action_just_pressed("press"):
 			tower_type = "FJ"
 			get_parent().energy -= price[4]
 			level += 1
 			quit_tower_board()
+			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		else:
 			is_chosen = !is_chosen
 	else:
@@ -70,15 +83,15 @@ func is_point_in_circle(point: Vector2, circle_center: Vector2, radius: float) -
 	return point.distance_to(circle_center) <= radius
 
 func _on_mouse_entered() -> void:
+	is_entered = true
 	if tower_type == "":
-		is_entered = true
 		stage_open()
 
 
 func _on_mouse_exited() -> void:
-	if tower_type == "":
-		is_entered = false
-		if !is_chosen:
+	is_entered = false
+	if !is_chosen:
+		if tower_type == "":
 			stage_close()
 
 func stage_open():

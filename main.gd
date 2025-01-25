@@ -3,12 +3,14 @@ extends Node2D
 var locked_tower = -1
 var time_res = 0
 var energy = 100
+var defensePoints = 10
 var towers = []  # 创建数组存储所有tower
 var paths = []
 var path1 = []
 var enemy_scene = preload("res://enemies/001.tscn")  # 预加载敌人场景
 var enemies = []  # 存储所有敌人实例的数组
 var energy_label 
+var defense_label  # 新增防御点数标签变量
 
 # 存储敌人数据的结构体
 class EnemyData:
@@ -31,8 +33,10 @@ var enemy_scenes = {
 }
 
 func _ready():
-	# 初始化towers数组
+	# 初始化标签
 	energy_label = $Energy
+	defense_label = $Defense  # 获取防御点数标签引用
+	
 	towers = [$Tower, $Tower2, $Tower3]
 	path1 = [$Checkpoint, $Checkpoint2, $Checkpoint3, $Checkpoint4]
 	paths.append(path1)
@@ -46,8 +50,9 @@ func _ready():
 	# 设置背景颜色为黑色
 	RenderingServer.set_default_clear_color(Color(0, 0, 0, 1))
 	
-	# 设置Energy标签的字体大小
+	# 设置标签的字体大小
 	energy_label.add_theme_font_size_override("font_size", 40)
+	defense_label.add_theme_font_size_override("font_size", 40)  # 设置防御点数标签字体大小
 
 func _process(delta: float) -> void:
 	time_res += delta
@@ -56,11 +61,16 @@ func _process(delta: float) -> void:
 	spawn_enemies()
 	update_enemies_position(delta)  # 添加更新敌人位置的调用
 	
-	# 更新Energy标签的文本
+	# 更新标签文本
 	energy_label.text = "Energy: " + str(energy)
+	defense_label.text = "Defense: " + str(defensePoints)  # 更新防御点数显示
 
 func locking():
 	for i in range(towers.size()):
+		if locked_tower == i + 1:
+			towers[i].z_index = 10
+		else:
+			towers[i].z_index = 0
 		if towers[i].is_chosen and locked_tower != i + 1:
 			locked_tower = i + 1
 			change_tower_stage()
