@@ -12,3 +12,7 @@ Add bullet system
 ## 2025 Jan 25
 Add tower UI  
 Enemy can be killed or enter the defense point  
+
+## 2025 Jan 27
+Allow to upgrade tower  
+Allow to sell tower  
