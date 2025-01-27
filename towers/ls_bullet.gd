@@ -2,12 +2,17 @@ extends Area2D
 var goal
 var speed = 5000
 var damage = 10  # 子弹伤害值
+var level = 0
+var sprite = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# 确保连接信号
 	area_entered.connect(_on_area_entered)
 	visible = false
+	sprite.append($level1)
+	sprite.append($level2)
+	sprite[level - 1].visible = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

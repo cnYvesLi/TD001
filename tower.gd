@@ -12,6 +12,12 @@ const tower_radius : int = 25
 var LS = [preload("res://towers/LS.tscn")]
 var type
 var ui_visible = false  # 新增UI显示状态变量
+@onready var sell_p = $UI/sell/sell
+@onready var upgrade_p = $UI/upgrade/price
+@onready var merge_p = $UI/merge/merge
+@onready var damage = $UI/damage
+@onready var speed = $UI/speed
+@onready var range = $UI/range
 
 func _ready() -> void:
 	$Tower1.visible = false
@@ -21,7 +27,7 @@ func _ready() -> void:
 	$Tower5.visible = false
 	$TowerPositionOpen.visible = false
 	$UI.visible = false  # 初始化时UI不可见
-	$UI.modulate.a = 0.7 # 设置UI透明度为80%
+	$UI.modulate.a = 0.8 # 设置UI透明度为80%
 
 func _process(_delta: float):
 	if is_entered and Input.is_action_just_pressed("press"):
@@ -76,8 +82,52 @@ func _process(_delta: float):
 		else:
 			is_chosen = !is_chosen
 	else:
-		$TowerPositionOpen.visible = false
-		$TowerPositionClosed.visible = false
+		var ready_sell = $UI/sell/TowerSellS.visible and $UI/sell/sell.modulate == Color(1, 0, 0)
+		var ready_upgrade = $UI/upgrade/TowerUpgradeS.visible and $UI/upgrade/price.modulate == Color(1, 0, 0)
+		var ready_merge = $UI/merge/TowerMergeS.visible and $UI/merge/merge.modulate == Color(1, 0, 0)
+		if ready_sell:
+			get_parent().energy += type.sell[level - 1]
+			type.queue_free()
+			type = null
+			tower_type = ""
+			is_chosen = !is_chosen
+			stage_close()
+			level = 0
+		if ready_upgrade and get_parent().energy > type.price[level - 1]:
+			get_parent().energy -= type.price[level - 1]
+			level += 1
+			$UI/upgrade/price.modulate == Color(1, 1, 1)
+			$UI/upgrade/TowerUpgradeS.visible = false
+		
+		
+		if tower_type != "":
+			if $UI/upgrade/TowerUpgradeS.visible:
+				speed.text = str(type.damage_speed[level])
+				range.text = str(type.d_range[level]/1000)
+				damage.text = str(type.damage[level])
+				if type.damage_speed[level] > type.damage_speed[level - 1]:
+					speed.modulate = Color(0, 1, 0)
+				if type.d_range[level] > type.d_range[level - 1]:
+					range.modulate = Color(0, 1, 0)
+				if type.damage[level] > type.damage[level - 1]:
+					damage.modulate = Color(0, 1, 0)
+			else:
+				speed.text = str(type.damage_speed[level - 1])
+				range.text = str(type.d_range[level - 1]/1000)
+				damage.text = str(type.damage[level - 1])
+				speed.modulate = Color(1, 1, 1)
+				range.modulate = Color(1, 1, 1)
+				damage.modulate = Color(1, 1, 1)
+				type.level = level
+			$TowerPositionOpen.visible = false
+			$TowerPositionClosed.visible = false
+			$UI/sell/sell.text = str(type.sell[level - 1])
+			$UI/upgrade/price.text = str(type.price[level - 1])
+			if level >= 3:
+				$UI/merge/merge.text = "100"
+			else:
+				$UI/merge/merge.text = "INF"
+
 # 添加一个辅助函数来检查点是否在圆形区域内
 func is_point_in_circle(point: Vector2, circle_center: Vector2, radius: float) -> bool:
 	return point.distance_to(circle_center) <= radius

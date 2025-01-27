@@ -14,13 +14,13 @@ scale = Vector2(0.148828, 0.148828)
 texture = ExtResource("1_4besh")
 
 [node name="Tower" parent="." instance=ExtResource("2_lp1c8")]
-position = Vector2(2414, 1156)
+position = Vector2(2493, 1223)
 
 [node name="Tower2" parent="." instance=ExtResource("2_lp1c8")]
-position = Vector2(2230, 1116)
+position = Vector2(2229, 1107)
 
 [node name="Tower3" parent="." instance=ExtResource("2_lp1c8")]
-position = Vector2(2128, 1277)
+position = Vector2(2114, 1373)
 
 [node name="Defense" type="Label" parent="."]
 offset_left = 46.0

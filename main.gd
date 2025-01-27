@@ -117,7 +117,7 @@ func update_enemies_position(delta: float) -> void:
 		for tower in towers:
 			if tower.type:  # 确保炮塔有类型
 				var distance = enemy.position.distance_to(tower.position)
-				if distance <= tower.type.d_range:
+				if distance <= tower.type.d_range[tower.level]:
 					# 将敌人及其到终点的距离添加到炮塔的检测范围内
 					tower.type.enemies_in_range[enemy] = enemy.dis2final
 		

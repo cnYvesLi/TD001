@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bbgbtysnt13nu"]
+[gd_scene load_steps=27 format=3 uid="uid://bbgbtysnt13nu"]
 
 [ext_resource type="Script" path="res://tower.gd" id="1_crrkb"]
 [ext_resource type="Texture2D" uid="uid://jmhw6sqyaf5c" path="res://sprites/tower_position_closed.png" id="2_wtoqq"]
@@ -7,11 +7,14 @@
 [ext_resource type="Texture2D" uid="uid://cwjf7q71l6oog" path="res://sprites/test_tower3.png" id="5_86x8q"]
 [ext_resource type="Texture2D" uid="uid://c88o10y3mqsg4" path="res://sprites/tower_ui1.png" id="6_gald3"]
 [ext_resource type="Texture2D" uid="uid://cscty4v313u51" path="res://sprites/tower_sell.png" id="7_grm2h"]
+[ext_resource type="Script" path="res://sell.gd" id="7_rqjet"]
 [ext_resource type="Texture2D" uid="uid://dmng1ls32dscy" path="res://sprites/tower_sell_s.png" id="8_p1xqr"]
 [ext_resource type="Texture2D" uid="uid://cu0sookgg72d3" path="res://sprites/tower_upgrade.png" id="9_royu1"]
 [ext_resource type="Texture2D" uid="uid://py1x453kxkkm" path="res://sprites/tower_upgrade_s.png" id="10_2c7fs"]
+[ext_resource type="Script" path="res://upgrade.gd" id="10_8xtxf"]
 [ext_resource type="Texture2D" uid="uid://dllh3idiv2tk1" path="res://sprites/tower_merge.png" id="11_n3fvj"]
 [ext_resource type="Texture2D" uid="uid://dwacnuymj5o4h" path="res://sprites/tower_merge_s.png" id="12_xrq4x"]
+[ext_resource type="Script" path="res://merge.gd" id="13_qefdq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7va4j"]
 radius = 58.3571
@@ -126,6 +129,7 @@ texture = ExtResource("4_635nw")
 shape = SubResource("CircleShape2D_vr60h")
 
 [node name="UI" type="Node2D" parent="."]
+visible = false
 self_modulate = Color(1, 1, 1, 0.521569)
 
 [node name="TowerUi1" type="Sprite2D" parent="UI"]
@@ -133,6 +137,7 @@ position = Vector2(1, 1)
 texture = ExtResource("6_gald3")
 
 [node name="sell" type="Area2D" parent="UI"]
+script = ExtResource("7_rqjet")
 
 [node name="TowerSell" type="Sprite2D" parent="UI/sell"]
 texture = ExtResource("7_grm2h")
@@ -149,10 +154,11 @@ offset_bottom = 199.0
 text = "100"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UI/sell"]
-position = Vector2(1.5, 188)
+position = Vector2(4, 189)
 shape = SubResource("RectangleShape2D_qiihc")
 
 [node name="upgrade" type="Area2D" parent="UI"]
+script = ExtResource("10_8xtxf")
 
 [node name="TowerUpgrade" type="Sprite2D" parent="UI/upgrade"]
 position = Vector2(0, 1)
@@ -173,48 +179,52 @@ offset_right = -122.0
 offset_bottom = -22.0
 text = "100"
 
-[node name="Area2D" type="Area2D" parent="UI"]
+[node name="merge" type="Area2D" parent="UI"]
+script = ExtResource("13_qefdq")
 
-[node name="TowerMerge" type="Sprite2D" parent="UI/Area2D"]
+[node name="TowerMerge" type="Sprite2D" parent="UI/merge"]
 position = Vector2(0, 15)
 texture = ExtResource("11_n3fvj")
 
-[node name="TowerMergeS" type="Sprite2D" parent="UI/Area2D"]
+[node name="TowerMergeS" type="Sprite2D" parent="UI/merge"]
 visible = false
-position = Vector2(0, 7)
+position = Vector2(0, 15)
 texture = ExtResource("12_xrq4x")
 
-[node name="merge" type="Label" parent="UI/Area2D"]
+[node name="merge" type="Label" parent="UI/merge"]
 offset_left = -163.0
 offset_top = 55.0
 offset_right = -123.0
 offset_bottom = 78.0
 text = "100"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UI/merge"]
 position = Vector2(-147.5, 49.5)
 shape = SubResource("RectangleShape2D_gfrl0")
 
 [node name="damage" type="Label" parent="UI"]
 offset_left = 140.0
-offset_top = -55.0
-offset_right = 180.0
-offset_bottom = -32.0
+offset_top = -58.0
+offset_right = 183.0
+offset_bottom = -23.0
+theme_override_font_sizes/font_size = 20
 text = "100
 "
 
 [node name="speed" type="Label" parent="UI"]
 offset_left = 140.0
-offset_top = -15.0
+offset_top = -18.0
 offset_right = 180.0
-offset_bottom = 8.0
+offset_bottom = 13.0
+theme_override_font_sizes/font_size = 20
 text = "100"
 
 [node name="range" type="Label" parent="UI"]
-offset_left = 141.0
-offset_top = 25.0
-offset_right = 183.0
-offset_bottom = 48.0
+offset_left = 140.0
+offset_top = 21.0
+offset_right = 182.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 20
 text = "100"
 
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]
