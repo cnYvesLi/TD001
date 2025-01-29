@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
 
 func _on_input_event(viewport, event, shape_idx) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
-		$sell.modulate = Color(1, 0, 0)  # 设置为红色
+		$sell.modulate = Color(0, 1, 0)
 		res = 5
 
 func _on_mouse_entered() -> void:

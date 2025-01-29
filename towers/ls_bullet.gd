@@ -12,6 +12,7 @@ func _ready() -> void:
 	visible = false
 	sprite.append($level1)
 	sprite.append($level2)
+	sprite.append($level2)
 	sprite[level - 1].visible = true
 
 

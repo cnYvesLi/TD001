@@ -18,6 +18,8 @@ var ui_visible = false  # 新增UI显示状态变量
 @onready var damage = $UI/damage
 @onready var speed = $UI/speed
 @onready var range = $UI/range
+var res_upgrade = 0
+
 
 func _ready() -> void:
 	$Tower1.visible = false
@@ -28,26 +30,45 @@ func _ready() -> void:
 	$TowerPositionOpen.visible = false
 	$UI.visible = false  # 初始化时UI不可见
 	$UI.modulate.a = 0.8 # 设置UI透明度为80%
+	$prev1.modulate.a = 0.5
 
 func _process(_delta: float):
-	if is_entered and Input.is_action_just_pressed("press"):
-		is_chosen = !is_chosen
-		if tower_type == "":
-			# 未建造塔时的原有逻辑
-			quit_tower_board()
-	
+	var mouse_pos = get_local_mouse_position()
+	var enter_tower1 = is_point_in_circle(mouse_pos, $Tower1.position, tower_radius)
+	var enter_tower2 = is_point_in_circle(mouse_pos, $Tower2.position, tower_radius)
+	var enter_tower3 = is_point_in_circle(mouse_pos, $Tower3.position, tower_radius)
+	var enter_tower4 = is_point_in_circle(mouse_pos, $Tower4.position, tower_radius)
+	var enter_tower5 = is_point_in_circle(mouse_pos, $Tower5.position, tower_radius)
+	if Input.is_action_just_pressed("press"):
+		if is_chosen:
+			if  tower_type == "" and not enter_tower1 and not enter_tower2 and not enter_tower3 and not enter_tower4 and not enter_tower5:
+				is_chosen = false
+				quit_tower_board()
+			elif tower_type != "" and not $UI/sell/TowerSellS.visible and not $UI/upgrade/TowerUpgradeS.visible and not $UI/merge/TowerMergeS.visible:
+				is_chosen = false
+		elif is_entered:
+			if not is_chosen:
+				is_chosen = true
+			if tower_type == "":
+				quit_tower_board()
 	if is_chosen and tower_type == "":
 		choosing_tower()
 	elif is_chosen and tower_type != "":
 		$UI.visible = true
 	else:
 		$UI.visible = false
-	var mouse_pos = get_local_mouse_position()
 	# 检测点击各个塔的逻辑
 	if tower_type == "":
 		is_chosen = !is_chosen
 		var property = get_parent().energy
-		if property > price[0] and $Tower1.visible and is_point_in_circle(mouse_pos, $Tower1.position, tower_radius) and Input.is_action_just_pressed("press"):
+		if not $TowerPositionClosed.visible:
+			$TowerPositionOpen.visible = true
+		if $Tower1.visible and enter_tower1:
+			$prev1.visible = true
+			$TowerPositionOpen.visible = false
+		else:
+			$prev1.visible = false
+		if property > price[0] and $Tower1.visible and enter_tower1 and Input.is_action_just_pressed("press"):
 			tower_type = "LS"
 			get_parent().energy -= price[0]
 			level += 1
@@ -55,25 +76,25 @@ func _process(_delta: float):
 			type = LS[0].instantiate()
 			add_child(type)
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[1] and $Tower2.visible and is_point_in_circle(mouse_pos, $Tower2.position, tower_radius) and Input.is_action_just_pressed("press"):
+		elif property > price[1] and $Tower2.visible and enter_tower2 and Input.is_action_just_pressed("press"):
 			tower_type = "MI"
 			get_parent().energy -= price[1]
 			level += 1
 			quit_tower_board()
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[2] and $Tower3.visible and is_point_in_circle(mouse_pos, $Tower3.position, tower_radius) and Input.is_action_just_pressed("press"):
+		elif property > price[2] and $Tower3.visible and enter_tower3 and Input.is_action_just_pressed("press"):
 			tower_type = "BH"
 			get_parent().energy -= price[2]
 			level += 1
 			quit_tower_board()
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[3] and $Tower4.visible and is_point_in_circle(mouse_pos, $Tower4.position, tower_radius) and Input.is_action_just_pressed("press"):
+		elif property > price[3] and $Tower4.visible and enter_tower4 and Input.is_action_just_pressed("press"):
 			tower_type = "GA"
 			get_parent().energy -= price[3]
 			level += 1
 			quit_tower_board()
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[4] and $Tower5.visible and is_point_in_circle(mouse_pos, $Tower5.position, tower_radius) and Input.is_action_just_pressed("press"):
+		elif property > price[4] and $Tower5.visible and enter_tower5 and Input.is_action_just_pressed("press"):
 			tower_type = "FJ"
 			get_parent().energy -= price[4]
 			level += 1
@@ -82,7 +103,8 @@ func _process(_delta: float):
 		else:
 			is_chosen = !is_chosen
 	else:
-		var ready_sell = $UI/sell/TowerSellS.visible and $UI/sell/sell.modulate == Color(1, 0, 0)
+		$prev1.visible = false
+		var ready_sell = $UI/sell/TowerSellS.visible and $UI/sell/sell.modulate == Color(0, 1, 0)
 		var ready_upgrade = $UI/upgrade/TowerUpgradeS.visible and $UI/upgrade/price.modulate == Color(1, 0, 0)
 		var ready_merge = $UI/merge/TowerMergeS.visible and $UI/merge/merge.modulate == Color(1, 0, 0)
 		if ready_sell:
@@ -93,24 +115,26 @@ func _process(_delta: float):
 			is_chosen = !is_chosen
 			stage_close()
 			level = 0
-		if ready_upgrade and get_parent().energy > type.price[level - 1]:
-			get_parent().energy -= type.price[level - 1]
-			level += 1
-			$UI/upgrade/price.modulate == Color(1, 1, 1)
-			$UI/upgrade/TowerUpgradeS.visible = false
-		
-		
+		if res_upgrade == 0:
+			if ready_upgrade and get_parent().energy > type.price[level - 1]:
+				get_parent().energy -= type.price[level - 1]
+				level += 1
+				res_upgrade = 10
+				type.level = level
+		else:
+			res_upgrade -= 1
 		if tower_type != "":
 			if $UI/upgrade/TowerUpgradeS.visible:
-				speed.text = str(type.damage_speed[level])
-				range.text = str(type.d_range[level]/1000)
-				damage.text = str(type.damage[level])
-				if type.damage_speed[level] > type.damage_speed[level - 1]:
-					speed.modulate = Color(0, 1, 0)
-				if type.d_range[level] > type.d_range[level - 1]:
-					range.modulate = Color(0, 1, 0)
-				if type.damage[level] > type.damage[level - 1]:
-					damage.modulate = Color(0, 1, 0)
+				if level <= 2:
+					speed.text = str(type.damage_speed[level])
+					range.text = str(type.d_range[level]/1000)
+					damage.text = str(type.damage[level])
+					if type.damage_speed[level] > type.damage_speed[level - 1]:
+						speed.modulate = Color(0, 1, 0)
+					if type.d_range[level] > type.d_range[level - 1]:
+						range.modulate = Color(0, 1, 0)
+					if type.damage[level] > type.damage[level - 1]:
+						damage.modulate = Color(0, 1, 0)
 			else:
 				speed.text = str(type.damage_speed[level - 1])
 				range.text = str(type.d_range[level - 1]/1000)
@@ -146,7 +170,7 @@ func _on_mouse_exited() -> void:
 
 func stage_open():
 	$TowerPositionOpen.visible = true
-	$TowerPositionClosed.visible = false	
+	$TowerPositionClosed.visible = false
 
 func stage_close():
 	$TowerPositionOpen.visible = false

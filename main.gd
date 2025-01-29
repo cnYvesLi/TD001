@@ -2,7 +2,7 @@ extends Node2D
 
 var locked_tower = -1
 var time_res = 0
-var energy = 100
+var energy = 150
 var defensePoints = 10
 var towers = []  # 创建数组存储所有tower
 var paths = []
@@ -11,6 +11,9 @@ var enemy_scene = preload("res://enemies/001.tscn")  # 预加载敌人场景
 var enemies = []  # 存储所有敌人实例的数组
 var energy_label 
 var defense_label  # 新增防御点数标签变量
+@onready var p1_satellites = [$Tower, $Tower2, $Tower3]
+@onready var p1 = $p1
+@onready var offset_planets = {p1:0}
 
 # 存储敌人数据的结构体
 class EnemyData:
@@ -60,10 +63,22 @@ func _process(delta: float) -> void:
 	change_tower_stage()
 	spawn_enemies()
 	update_enemies_position(delta)  # 添加更新敌人位置的调用
-	
+	relocate(p1, p1_satellites, 200)
 	# 更新标签文本
 	energy_label.text = "Energy: " + str(energy)
 	defense_label.text = "Defense: " + str(defensePoints)  # 更新防御点数显示
+	
+	# 检查右键是否按下并且在 p1 范围内
+	if Input.is_action_pressed("mouse_right") and p1.position.distance_to(get_global_mouse_position()) <= $p1/CollisionShape2D.shape.radius:
+		offset_planets[p1] += delta  # 持续增加 offset_planets[p1] 的值
+
+func relocate(planet, satellites, distance):
+	var num_satellites = satellites.size()
+	for i in range(num_satellites):
+		var angle = (i * 2 * PI) / num_satellites  # 计算每个卫星的角度
+		var x = planet.position.x + distance * cos(angle + offset_planets[planet])  # 计算 x 坐标
+		var y = planet.position.y + distance * sin(angle + offset_planets[planet])  # 计算 y 坐标
+		satellites[i].position = Vector2(x, y)  # 设置卫星位置
 
 func locking():
 	for i in range(towers.size()):
@@ -117,7 +132,7 @@ func update_enemies_position(delta: float) -> void:
 		for tower in towers:
 			if tower.type:  # 确保炮塔有类型
 				var distance = enemy.position.distance_to(tower.position)
-				if distance <= tower.type.d_range[tower.level]:
+				if distance <= tower.type.d_range[tower.level - 1]:
 					# 将敌人及其到终点的距离添加到炮塔的检测范围内
 					tower.type.enemies_in_range[enemy] = enemy.dis2final
 		
