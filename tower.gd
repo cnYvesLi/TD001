@@ -39,7 +39,7 @@ func _process(_delta: float):
 	var enter_tower3 = is_point_in_circle(mouse_pos, $Tower3.position, tower_radius)
 	var enter_tower4 = is_point_in_circle(mouse_pos, $Tower4.position, tower_radius)
 	var enter_tower5 = is_point_in_circle(mouse_pos, $Tower5.position, tower_radius)
-	if Input.is_action_just_pressed("press"):
+	if Input.is_action_just_pressed("mouse_left"):
 		if is_chosen:
 			if  tower_type == "" and not enter_tower1 and not enter_tower2 and not enter_tower3 and not enter_tower4 and not enter_tower5:
 				is_chosen = false
@@ -68,7 +68,7 @@ func _process(_delta: float):
 			$TowerPositionOpen.visible = false
 		else:
 			$prev1.visible = false
-		if property > price[0] and $Tower1.visible and enter_tower1 and Input.is_action_just_pressed("press"):
+		if property > price[0] and $Tower1.visible and enter_tower1 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "LS"
 			get_parent().energy -= price[0]
 			level += 1
@@ -76,25 +76,25 @@ func _process(_delta: float):
 			type = LS[0].instantiate()
 			add_child(type)
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[1] and $Tower2.visible and enter_tower2 and Input.is_action_just_pressed("press"):
+		elif property > price[1] and $Tower2.visible and enter_tower2 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "MI"
 			get_parent().energy -= price[1]
 			level += 1
 			quit_tower_board()
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[2] and $Tower3.visible and enter_tower3 and Input.is_action_just_pressed("press"):
+		elif property > price[2] and $Tower3.visible and enter_tower3 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "BH"
 			get_parent().energy -= price[2]
 			level += 1
 			quit_tower_board()
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[3] and $Tower4.visible and enter_tower4 and Input.is_action_just_pressed("press"):
+		elif property > price[3] and $Tower4.visible and enter_tower4 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "GA"
 			get_parent().energy -= price[3]
 			level += 1
 			quit_tower_board()
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
-		elif property > price[4] and $Tower5.visible and enter_tower5 and Input.is_action_just_pressed("press"):
+		elif property > price[4] and $Tower5.visible and enter_tower5 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "FJ"
 			get_parent().energy -= price[4]
 			level += 1

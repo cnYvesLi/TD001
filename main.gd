@@ -69,8 +69,11 @@ func _process(delta: float) -> void:
 	defense_label.text = "Defense: " + str(defensePoints)  # 更新防御点数显示
 	
 	# 检查右键是否按下并且在 p1 范围内
-	if Input.is_action_pressed("mouse_right") and p1.position.distance_to(get_global_mouse_position()) <= $p1/CollisionShape2D.shape.radius:
-		offset_planets[p1] += delta  # 持续增加 offset_planets[p1] 的值
+	if p1.position.distance_to(get_global_mouse_position()) <= $p1/CollisionShape2D.shape.radius:
+		if Input.is_action_pressed("mouse_left"):
+			offset_planets[p1] += delta  # 持续增加 offset_planets[p1] 的值
+		elif Input.is_action_pressed("mouse_right"):
+			offset_planets[p1] += 3 * delta  # 持续增加 offset_planets[p1] 的值
 
 func relocate(planet, satellites, distance):
 	var num_satellites = satellites.size()
