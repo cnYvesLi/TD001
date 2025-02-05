@@ -9,7 +9,8 @@ var acessories = [0, 0, 0]
 var tower_type : String = ""
 const price : Array = [1, 1, 1, 1, 1]
 const tower_radius : int = 25
-var LS = [preload("res://towers/LS.tscn")]
+var LS = preload("res://towers/LS.tscn")
+var MI = preload("res://towers/MI.tscn")
 var type
 var ui_visible = false  # 新增UI显示状态变量
 @onready var sell_p = $UI/sell/sell
@@ -31,6 +32,7 @@ func _ready() -> void:
 	$UI.visible = false  # 初始化时UI不可见
 	$UI.modulate.a = 0.8 # 设置UI透明度为80%
 	$prev1.modulate.a = 0.5
+	$prev2.modulate.a = 0.5
 
 func _process(_delta: float):
 	var mouse_pos = get_local_mouse_position()
@@ -68,12 +70,17 @@ func _process(_delta: float):
 			$TowerPositionOpen.visible = false
 		else:
 			$prev1.visible = false
+		if $Tower2.visible and enter_tower2:
+			$prev2.visible = true
+			$TowerPositionOpen.visible = false
+		else:
+			$prev2.visible = false
 		if property > price[0] and $Tower1.visible and enter_tower1 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "LS"
 			get_parent().energy -= price[0]
 			level += 1
 			quit_tower_board()
-			type = LS[0].instantiate()
+			type = LS.instantiate()
 			add_child(type)
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[1] and $Tower2.visible and enter_tower2 and Input.is_action_just_pressed("mouse_left"):
@@ -81,6 +88,8 @@ func _process(_delta: float):
 			get_parent().energy -= price[1]
 			level += 1
 			quit_tower_board()
+			type = MI.instantiate()
+			add_child(type)
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[2] and $Tower3.visible and enter_tower3 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "BH"
@@ -104,11 +113,15 @@ func _process(_delta: float):
 			is_chosen = !is_chosen
 	else:
 		$prev1.visible = false
+		$prev2.visible = false
 		var ready_sell = $UI/sell/TowerSellS.visible and $UI/sell/sell.modulate == Color(0, 1, 0)
 		var ready_upgrade = $UI/upgrade/TowerUpgradeS.visible and $UI/upgrade/price.modulate == Color(1, 0, 0)
 		var ready_merge = $UI/merge/TowerMergeS.visible and $UI/merge/merge.modulate == Color(1, 0, 0)
 		if ready_sell:
 			get_parent().energy += type.sell[level - 1]
+			if tower_type == "MI":
+				for i in range(type.bullets.size() - 1, -1, -1):
+					type.bullets[i].queue_free()
 			type.queue_free()
 			type = null
 			tower_type = ""
@@ -145,6 +158,7 @@ func _process(_delta: float):
 				type.level = level
 			$TowerPositionOpen.visible = false
 			$TowerPositionClosed.visible = false
+			$CollisionShape2D.visible = true
 			$UI/sell/sell.text = str(type.sell[level - 1])
 			$UI/upgrade/price.text = str(type.price[level - 1])
 			if level >= 3:

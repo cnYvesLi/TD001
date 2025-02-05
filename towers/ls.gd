@@ -9,12 +9,10 @@ var build_time = 0.2  # 建造时间
 var time_passed = 0  # 已经过的时间
 var price = [10, 100, 200]
 var sell = [5, 10, 20, 30]
-var sprites = []
+@onready var sprites = [$level1, $level2]
 
 func _ready() -> void:
 	# 连接Timer信号
-	sprites.append($level1)
-	sprites.append($level2)
 	$Timer.timeout.connect(_on_timer_timeout)
 	$Timer.one_shot = false
 	$Timer.start()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bbgbtysnt13nu"]
+[gd_scene load_steps=31 format=3 uid="uid://bbgbtysnt13nu"]
 
 [ext_resource type="Script" path="res://tower.gd" id="1_crrkb"]
 [ext_resource type="Texture2D" uid="uid://jmhw6sqyaf5c" path="res://sprites/tower_position_closed.png" id="2_wtoqq"]
@@ -7,9 +7,12 @@
 [ext_resource type="Texture2D" uid="uid://dvoggfme6y8p4" path="res://sprites/LS_L1.png" id="4_mf8wn"]
 [ext_resource type="Texture2D" uid="uid://cwjf7q71l6oog" path="res://sprites/test_tower3.png" id="5_86x8q"]
 [ext_resource type="Texture2D" uid="uid://c88o10y3mqsg4" path="res://sprites/tower_ui1.png" id="6_gald3"]
+[ext_resource type="Texture2D" uid="uid://ds1pt6ch85hwi" path="res://sprites/MI_L1_base.png" id="7_bn2gx"]
 [ext_resource type="Texture2D" uid="uid://cscty4v313u51" path="res://sprites/tower_sell.png" id="7_grm2h"]
 [ext_resource type="Script" path="res://sell.gd" id="7_rqjet"]
 [ext_resource type="Texture2D" uid="uid://dmng1ls32dscy" path="res://sprites/tower_sell_s.png" id="8_p1xqr"]
+[ext_resource type="Texture2D" uid="uid://bf2k4mw6xhghd" path="res://sprites/MI_bullet1.png" id="8_s24nb"]
+[ext_resource type="Texture2D" uid="uid://qcmg7x8bqaru" path="res://sprites/MI_L1.png" id="8_udi3k"]
 [ext_resource type="Texture2D" uid="uid://cu0sookgg72d3" path="res://sprites/tower_upgrade.png" id="9_royu1"]
 [ext_resource type="Texture2D" uid="uid://py1x453kxkkm" path="res://sprites/tower_upgrade_s.png" id="10_2c7fs"]
 [ext_resource type="Script" path="res://upgrade.gd" id="10_8xtxf"]
@@ -134,6 +137,32 @@ visible = false
 position = Vector2(0, -17)
 scale = Vector2(0.315, 0.315)
 texture = ExtResource("4_mf8wn")
+
+[node name="prev2" type="Node2D" parent="."]
+visible = false
+scale = Vector2(0.315, 0.315)
+
+[node name="1" type="Sprite2D" parent="prev2"]
+texture = ExtResource("7_bn2gx")
+
+[node name="Node2D" type="Node2D" parent="prev2"]
+position = Vector2(200, 0)
+scale = Vector2(0.7, 0.7)
+
+[node name="missile1" type="Sprite2D" parent="prev2/Node2D"]
+position = Vector2(-200, -171.429)
+texture = ExtResource("8_s24nb")
+
+[node name="missile3" type="Sprite2D" parent="prev2/Node2D"]
+position = Vector2(-371.429, -171.429)
+texture = ExtResource("8_s24nb")
+
+[node name="missile2" type="Sprite2D" parent="prev2/Node2D"]
+position = Vector2(-285.714, -171.429)
+texture = ExtResource("8_s24nb")
+
+[node name="2" type="Sprite2D" parent="prev2"]
+texture = ExtResource("8_udi3k")
 
 [node name="UI" type="Node2D" parent="."]
 visible = false

@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://de4uluin8p2oi"]
+
+[ext_resource type="Texture2D" uid="uid://bf2k4mw6xhghd" path="res://sprites/MI_bullet1.png" id="1_2p2c8"]
+[ext_resource type="Script" path="res://towers/mi_bullet.gd" id="1_qp21b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_575h3"]
+size = Vector2(160, 361)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_qp21b")
+
+[node name="level1" type="Sprite2D" parent="."]
+texture = ExtResource("1_2p2c8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -0.5)
+shape = SubResource("RectangleShape2D_575h3")

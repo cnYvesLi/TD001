@@ -1,6 +1,7 @@
 extends Area2D
 var HP : float = 0
 var ES : float = 0
+var DEF : float = 0
 var speed : float = 0
 var damage : float = 0
 var damage_speed : float = 0
@@ -45,6 +46,7 @@ func init_enemy_type(type):
 	defensePoint = sprite.defensePoint
 	HP = sprite.HP
 	ES = sprite.ES
+	DEF = sprite.DEF
 	value = sprite.value
 	speed = sprite.speed
 	damage = sprite.damage

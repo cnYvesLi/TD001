@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://oakywxhidijk"]
+
+[ext_resource type="Texture2D" uid="uid://b2v6vwak1r21b" path="res://sprites/MI_L1_explode.png" id="1_jnajx"]
+[ext_resource type="Script" path="res://towers/explode.gd" id="1_o68dl"]
+
+[node name="explode" type="Node2D"]
+script = ExtResource("1_o68dl")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_jnajx")
