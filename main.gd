@@ -63,17 +63,15 @@ func _process(delta: float) -> void:
 	change_tower_stage()
 	spawn_enemies()
 	update_enemies_position(delta)  # 添加更新敌人位置的调用
-	relocate(p1, p1_satellites, 200)
+	relocate(p1, p1_satellites, 250)
 	# 更新标签文本
 	energy_label.text = "Energy: " + str(energy)
 	defense_label.text = "Defense: " + str(defensePoints)  # 更新防御点数显示
 	
 	# 检查右键是否按下并且在 p1 范围内
 	if p1.position.distance_to(get_global_mouse_position()) <= $p1/CollisionShape2D.shape.radius:
-		if Input.is_action_pressed("mouse_left"):
+		if Input.is_action_pressed("mouse_right"):
 			offset_planets[p1] += delta  # 持续增加 offset_planets[p1] 的值
-		elif Input.is_action_pressed("mouse_right"):
-			offset_planets[p1] += 3 * delta  # 持续增加 offset_planets[p1] 的值
 
 func relocate(planet, satellites, distance):
 	var num_satellites = satellites.size()
@@ -140,16 +138,18 @@ func update_enemies_position(delta: float) -> void:
 					tower.type.enemies_in_range[enemy] = enemy.dis2final
 		
 		# 原有的移动逻辑
-		var target = paths[enemy.path_index][enemy.check_point].position
-		var direction = target - enemy.position
-		var distance = direction.length()
-		
-		if distance <= enemy.speed * delta:
-			enemy.check_point += 1
-			if enemy.check_point < paths[enemy.path_index].size():
-				enemy.position = target
-		else:
-			enemy.position += direction.normalized() * enemy.speed * delta
+		if enemy.opponent == null:
+			var target = paths[enemy.path_index][enemy.check_point].position
+			var direction = target - enemy.position
+			var distance = direction.length()
+			if (target.x - enemy.position.x > 0 and enemy.scale.x > 0) or (target.x - enemy.position.x < 0 and enemy.scale.x < 0):
+				enemy.scale.x = -enemy.scale.x
+			if distance <= enemy.speed * delta:
+				enemy.check_point += 1
+				if enemy.check_point < paths[enemy.path_index].size():
+					enemy.position = target
+			else:
+				enemy.position += direction.normalized() * enemy.speed * delta
 
 # 生成敌人的函数
 func spawn_enemy(enemy_data: EnemyData):

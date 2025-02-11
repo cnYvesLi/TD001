@@ -11,6 +11,7 @@ const price : Array = [1, 1, 1, 1, 1]
 const tower_radius : int = 25
 var LS = preload("res://towers/LS.tscn")
 var MI = preload("res://towers/MI.tscn")
+var GA = preload("res://towers/GA.tscn")
 var type
 var ui_visible = false  # 新增UI显示状态变量
 @onready var sell_p = $UI/sell/sell
@@ -35,6 +36,7 @@ func _ready() -> void:
 	$prev2.modulate.a = 0.5
 
 func _process(_delta: float):
+	$UI.z_index = 100
 	var mouse_pos = get_local_mouse_position()
 	var enter_tower1 = is_point_in_circle(mouse_pos, $Tower1.position, tower_radius)
 	var enter_tower2 = is_point_in_circle(mouse_pos, $Tower2.position, tower_radius)
@@ -92,13 +94,15 @@ func _process(_delta: float):
 			add_child(type)
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[2] and $Tower3.visible and enter_tower3 and Input.is_action_just_pressed("mouse_left"):
-			tower_type = "BH"
+			tower_type = "GA"
 			get_parent().energy -= price[2]
 			level += 1
 			quit_tower_board()
+			type = GA.instantiate()
+			add_child(type)
 			$CollisionShape2D.scale = Vector2(1.5, 1.5)
 		elif property > price[3] and $Tower4.visible and enter_tower4 and Input.is_action_just_pressed("mouse_left"):
-			tower_type = "GA"
+			tower_type = "BH"
 			get_parent().energy -= price[3]
 			level += 1
 			quit_tower_board()
@@ -139,7 +143,7 @@ func _process(_delta: float):
 		if tower_type != "":
 			if $UI/upgrade/TowerUpgradeS.visible:
 				if level <= 2:
-					speed.text = str(type.damage_speed[level])
+					speed.text = str(type.damage_speed[level - 1])
 					range.text = str(type.d_range[level]/1000)
 					damage.text = str(type.damage[level])
 					if type.damage_speed[level] > type.damage_speed[level - 1]:

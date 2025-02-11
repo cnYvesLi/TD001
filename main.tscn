@@ -13,6 +13,7 @@ script = ExtResource("1_y0amh")
 
 [node name="p1" type="Area2D" parent="."]
 position = Vector2(2300, 1300)
+scale = Vector2(1.2, 1.2)
 
 [node name="Sol-iii" type="Sprite2D" parent="p1"]
 scale = Vector2(0.15, 0.15)
@@ -51,11 +52,11 @@ position = Vector2(0, 219)
 texture = ExtResource("4_uwusc")
 
 [node name="Checkpoint2" type="Sprite2D" parent="."]
-position = Vector2(1001, 317)
+position = Vector2(889, 317)
 texture = ExtResource("4_uwusc")
 
 [node name="Checkpoint3" type="Sprite2D" parent="."]
-position = Vector2(1209, 986)
+position = Vector2(1146, 970)
 texture = ExtResource("4_uwusc")
 
 [node name="Checkpoint4" type="Sprite2D" parent="."]

@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://b50lljv8da5v1"]
+
+[ext_resource type="Texture2D" uid="uid://dmdlfnp0am4ym" path="res://sprites/GA/GA_drone_L1.png" id="1_dukqb"]
+[ext_resource type="Script" path="res://towers/drone.gd" id="1_rixyw"]
+[ext_resource type="PackedScene" uid="uid://o5bpvpnshsem" path="res://enemies/HP.tscn" id="3_8swgw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rej47"]
+radius = 322.025
+
+[node name="drone" type="Area2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_rixyw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-2, -18)
+texture = ExtResource("1_dukqb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-560, 566)
+shape = SubResource("CircleShape2D_rej47")
+
+[node name="HP_bar" parent="." instance=ExtResource("3_8swgw")]
+position = Vector2(0, 130)
+scale = Vector2(0.7, 0.467)
+
+[node name="Timer" type="Timer" parent="."]

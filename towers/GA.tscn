@@ -1,0 +1,112 @@
+[gd_scene load_steps=13 format=3 uid="uid://dn6bak8ampxg"]
+
+[ext_resource type="Script" path="res://towers/ga.gd" id="1_wa4yq"]
+[ext_resource type="Texture2D" uid="uid://bb0xbv2wog0sw" path="res://sprites/GA/GA_base.png" id="2_7yx6g"]
+[ext_resource type="Texture2D" uid="uid://c8sqohj8uwjsa" path="res://sprites/GA/GA_base_L1_background.png" id="3_yhgje"]
+[ext_resource type="Texture2D" uid="uid://c7putrrgqlua" path="res://sprites/GA/GA_base_L1_gate2.png" id="4_cx1vy"]
+[ext_resource type="Texture2D" uid="uid://b5klcyws1gq4w" path="res://sprites/GA/GA_base_L1_gate.png" id="5_gvsrb"]
+[ext_resource type="Texture2D" uid="uid://nini4grhoeo0" path="res://sprites/GA/GA_base2.png" id="6_lc1na"]
+[ext_resource type="Texture2D" uid="uid://dmdlfnp0am4ym" path="res://sprites/GA/GA_drone_L1.png" id="7_8jf14"]
+[ext_resource type="Texture2D" uid="uid://cnrimivh2sybh" path="res://sprites/GA/GA_base1.png" id="8_n1qpc"]
+[ext_resource type="Texture2D" uid="uid://cfh5dsqo8b1k4" path="res://sprites/GA/GA_base_L1_greenlight.png" id="9_2a6sq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8401g"]
+radius = 18.4391
+
+[sub_resource type="Curve2D" id="Curve2D_11dds"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -60, 20)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_26u6h"]
+bake_interval = 0.01
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, -20)
+}
+point_count = 2
+
+[node name="GA" type="Area2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_wa4yq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_8401g")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="level1" type="Node2D" parent="."]
+
+[node name="drone1" type="Sprite2D" parent="level1"]
+visible = false
+position = Vector2(-202, -176)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_8jf14")
+
+[node name="drone2" type="Sprite2D" parent="level1"]
+visible = false
+position = Vector2(14, -316)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_8jf14")
+
+[node name="drone3" type="Sprite2D" parent="level1"]
+visible = false
+position = Vector2(220, -168)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_8jf14")
+
+[node name="base" type="Sprite2D" parent="level1"]
+visible = false
+texture = ExtResource("2_7yx6g")
+
+[node name="background" type="Sprite2D" parent="level1"]
+position = Vector2(-2, 2)
+texture = ExtResource("3_yhgje")
+
+[node name="g2" type="Path2D" parent="level1"]
+curve = SubResource("Curve2D_11dds")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="level1/g2"]
+rotation = 2.81984
+
+[node name="sprite" type="Sprite2D" parent="level1/g2/PathFollow2D"]
+position = Vector2(-1.26491, -2.52982)
+rotation = 3.48019
+texture = ExtResource("5_gvsrb")
+
+[node name="g1" type="Path2D" parent="level1"]
+position = Vector2(2, -2)
+curve = SubResource("Curve2D_26u6h")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="level1/g1"]
+rotation = -0.321751
+
+[node name="sprite" type="Sprite2D" parent="level1/g1/PathFollow2D"]
+position = Vector2(-1.26491, 3.79473)
+rotation = 0.342085
+texture = ExtResource("4_cx1vy")
+
+[node name="base2" type="Sprite2D" parent="level1"]
+position = Vector2(-4, 2)
+texture = ExtResource("6_lc1na")
+
+[node name="drone0" type="Sprite2D" parent="level1"]
+position = Vector2(12, 30)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_8jf14")
+
+[node name="base1" type="Sprite2D" parent="level1"]
+texture = ExtResource("8_n1qpc")
+
+[node name="light" type="Node2D" parent="level1"]
+
+[node name="l1" type="Sprite2D" parent="level1/light"]
+texture = ExtResource("9_2a6sq")
+
+[node name="l2" type="Sprite2D" parent="level1/light"]
+position = Vector2(30, 6)
+texture = ExtResource("9_2a6sq")
+
+[node name="l3" type="Sprite2D" parent="level1/light"]
+position = Vector2(61, 13)
+texture = ExtResource("9_2a6sq")

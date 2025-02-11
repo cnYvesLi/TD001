@@ -11,13 +11,25 @@ var value = 0
 var path_index = 0
 var dis2final = INF
 var sprite
+var opponent = null
+var random_offset
+var is_fighting = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	$Timer.timeout.connect(_on_timer_timeout)
+	$Timer.one_shot = false
+	$Timer.start()
 
 func _process(delta: float) -> void:
+	$Timer.wait_time = 1 / damage_speed
+	$HP_display.HP = HP
+	$HP_display.ES = ES
+	
 	if HP <= 0:
+		if opponent != null:
+			opponent.opponent = null
+			opponent.is_fighting = false
 		# 通知主场景增加能量
 		get_parent().energy += value
 		# 从敌人数组中移除自己
@@ -33,12 +45,15 @@ func _process(delta: float) -> void:
 		get_parent().enemies.erase(self)
 		# 销毁自己
 		queue_free()
+	if $Timer.is_stopped() and is_fighting and opponent != null:
+		$Timer.start()
+		opponent.HP -= damage * (1 - opponent.DEF)
 
 func init_enemy_type(type):
 	sprite = type.instantiate()
 	add_child(sprite)
 	# 生成-30到+30之间的随机偏移值
-	var random_offset = randf_range(-50, 50)
+	random_offset = randf_range(-50, 50)
 	# 获取Sprite2D和CollisionShape2D节点
 	var collision = $CollisionShape2D
 	var bar = $HP_display
@@ -58,3 +73,6 @@ func init_enemy_type(type):
 	bar.ES = ES
 	bar.HP_max = HP
 	bar.ES_max = ES
+	
+func _on_timer_timeout() -> void:
+	$Timer.stop()
