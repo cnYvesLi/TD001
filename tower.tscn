@@ -1,6 +1,7 @@
-[gd_scene load_steps=31 format=3 uid="uid://bbgbtysnt13nu"]
+[gd_scene load_steps=35 format=3 uid="uid://bbgbtysnt13nu"]
 
 [ext_resource type="Script" path="res://tower.gd" id="1_crrkb"]
+[ext_resource type="Texture2D" uid="uid://cciigi1j7sd0y" path="res://sprites/range.png" id="2_vyj4b"]
 [ext_resource type="Texture2D" uid="uid://jmhw6sqyaf5c" path="res://sprites/tower_position_closed.png" id="2_wtoqq"]
 [ext_resource type="Texture2D" uid="uid://j7b086ilhlsv" path="res://sprites/test_tower1.png" id="3_1ff3p"]
 [ext_resource type="Texture2D" uid="uid://35jwfa8rciff" path="res://sprites/test_tower2.png" id="4_635nw"]
@@ -16,8 +17,11 @@
 [ext_resource type="Texture2D" uid="uid://cu0sookgg72d3" path="res://sprites/tower_upgrade.png" id="9_royu1"]
 [ext_resource type="Texture2D" uid="uid://py1x453kxkkm" path="res://sprites/tower_upgrade_s.png" id="10_2c7fs"]
 [ext_resource type="Script" path="res://upgrade.gd" id="10_8xtxf"]
+[ext_resource type="Texture2D" uid="uid://c7putrrgqlua" path="res://sprites/GA/GA_base_L1_gate2.png" id="11_4sg1c"]
 [ext_resource type="Texture2D" uid="uid://dllh3idiv2tk1" path="res://sprites/tower_merge.png" id="11_n3fvj"]
+[ext_resource type="Texture2D" uid="uid://b5klcyws1gq4w" path="res://sprites/GA/GA_base_L1_gate.png" id="12_2ettr"]
 [ext_resource type="Texture2D" uid="uid://dwacnuymj5o4h" path="res://sprites/tower_merge_s.png" id="12_xrq4x"]
+[ext_resource type="Texture2D" uid="uid://bb0xbv2wog0sw" path="res://sprites/GA/GA_base.png" id="13_apgtk"]
 [ext_resource type="Script" path="res://merge.gd" id="13_qefdq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7va4j"]
@@ -54,6 +58,14 @@ size = Vector2(57, 57)
 
 [node name="Tower_Pos" type="Area2D"]
 script = ExtResource("1_crrkb")
+
+[node name="range" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_vyj4b")
+
+[node name="range2" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_vyj4b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(0.6, 0.6)
@@ -134,7 +146,6 @@ shape = SubResource("CircleShape2D_vr60h")
 
 [node name="prev1" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(0, -17)
 scale = Vector2(0.315, 0.315)
 texture = ExtResource("4_mf8wn")
 
@@ -163,6 +174,19 @@ texture = ExtResource("8_s24nb")
 
 [node name="2" type="Sprite2D" parent="prev2"]
 texture = ExtResource("8_udi3k")
+
+[node name="prev3" type="Node2D" parent="."]
+visible = false
+scale = Vector2(0.5, 0.5)
+
+[node name="3" type="Sprite2D" parent="prev3"]
+texture = ExtResource("11_4sg1c")
+
+[node name="2" type="Sprite2D" parent="prev3"]
+texture = ExtResource("12_2ettr")
+
+[node name="1" type="Sprite2D" parent="prev3"]
+texture = ExtResource("13_apgtk")
 
 [node name="UI" type="Node2D" parent="."]
 visible = false

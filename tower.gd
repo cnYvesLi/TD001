@@ -8,6 +8,7 @@ var acessories = [0, 0, 0]
 # tower_type: LS MI BH GA FJ
 var tower_type : String = ""
 const price : Array = [1, 1, 1, 1, 1]
+const ranges : Array = [8, 9, 9, 1, 1]
 const tower_radius : int = 25
 var LS = preload("res://towers/LS.tscn")
 var MI = preload("res://towers/MI.tscn")
@@ -30,11 +31,16 @@ func _ready() -> void:
 	$Tower4.visible = false
 	$Tower5.visible = false
 	$TowerPositionOpen.visible = false
+	$range.visible = false
+	$range2.visible = false
 	$UI.visible = false  # 初始化时UI不可见
 	$UI.modulate.a = 0.8 # 设置UI透明度为80%
 	$prev1.modulate.a = 0.5
 	$prev2.modulate.a = 0.5
-
+	$prev3.modulate.a = 0.5
+	$range.modulate.a = 0.3
+	$range2.modulate.a = 0.2
+	
 func _process(_delta: float):
 	$UI.z_index = 100
 	var mouse_pos = get_local_mouse_position()
@@ -59,24 +65,17 @@ func _process(_delta: float):
 		choosing_tower()
 	elif is_chosen and tower_type != "":
 		$UI.visible = true
+		$range.visible = true
 	else:
 		$UI.visible = false
+		$range.visible = false
 	# 检测点击各个塔的逻辑
 	if tower_type == "":
 		is_chosen = !is_chosen
 		var property = get_parent().energy
 		if not $TowerPositionClosed.visible:
 			$TowerPositionOpen.visible = true
-		if $Tower1.visible and enter_tower1:
-			$prev1.visible = true
-			$TowerPositionOpen.visible = false
-		else:
-			$prev1.visible = false
-		if $Tower2.visible and enter_tower2:
-			$prev2.visible = true
-			$TowerPositionOpen.visible = false
-		else:
-			$prev2.visible = false
+		preview(enter_tower1, enter_tower2, enter_tower3, enter_tower4, enter_tower5)
 		if property > price[0] and $Tower1.visible and enter_tower1 and Input.is_action_just_pressed("mouse_left"):
 			tower_type = "LS"
 			get_parent().energy -= price[0]
@@ -138,14 +137,20 @@ func _process(_delta: float):
 				level += 1
 				res_upgrade = 10
 				type.level = level
+				$range2.visible = false
 		else:
 			res_upgrade -= 1
 		if tower_type != "":
+			$range.scale.x = type.d_range[level - 1] / 100.0
+			$range.scale.y = type.d_range[level - 1] / 100.0
 			if $UI/upgrade/TowerUpgradeS.visible:
 				if level <= 2:
 					speed.text = str(type.damage_speed[level - 1])
-					range.text = str(type.d_range[level]/1000)
+					range.text = str(type.d_range[level]/100)
 					damage.text = str(type.damage[level])
+					$range2.scale.x = type.d_range[level] / 100.0
+					$range2.scale.y = type.d_range[level] / 100.0
+					$range2.visible = true
 					if type.damage_speed[level] > type.damage_speed[level - 1]:
 						speed.modulate = Color(0, 1, 0)
 					if type.d_range[level] > type.d_range[level - 1]:
@@ -154,12 +159,13 @@ func _process(_delta: float):
 						damage.modulate = Color(0, 1, 0)
 			else:
 				speed.text = str(type.damage_speed[level - 1])
-				range.text = str(type.d_range[level - 1]/1000)
+				range.text = str(type.d_range[level - 1]/100)
 				damage.text = str(type.damage[level - 1])
 				speed.modulate = Color(1, 1, 1)
 				range.modulate = Color(1, 1, 1)
 				damage.modulate = Color(1, 1, 1)
 				type.level = level
+				$range2.visible = false
 			$TowerPositionOpen.visible = false
 			$TowerPositionClosed.visible = false
 			$CollisionShape2D.visible = true
@@ -209,3 +215,38 @@ func quit_tower_board():
 	$Tower3.visible = false
 	$Tower4.visible = false
 	$Tower5.visible = false
+
+func preview(enter_tower1, enter_tower2, enter_tower3, enter_tower4, enter_tower5):
+	var previewing = false
+	#preview LS
+	if $Tower1.visible and enter_tower1:
+		previewing = true
+		$prev1.visible = true
+		$TowerPositionOpen.visible = false
+		$range.scale.x = ranges[0]
+		$range.scale.y = ranges[0]
+	else:
+		$prev1.visible = false
+	#preview MI
+	if $Tower2.visible and enter_tower2:
+		$prev2.visible = true
+		previewing = true
+		$TowerPositionOpen.visible = false
+		$range.scale.x = ranges[1]
+		$range.scale.y = ranges[1]
+	else:
+		$prev2.visible = false
+	#preview GA
+	if $Tower3.visible and enter_tower3:
+		$prev3.visible = true
+		previewing = true
+		$TowerPositionOpen.visible = false
+		$range.scale.x = ranges[2]
+		$range.scale.y = ranges[2]
+	else:
+		$prev3.visible = false
+	#Preview range
+	if previewing:
+		$range.visible = true
+	else:
+		$range.visible = false

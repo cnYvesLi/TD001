@@ -11,7 +11,7 @@ var value = 0
 var path_index = 0
 var dis2final = INF
 var sprite
-var opponent = null
+var opponents = []
 var random_offset
 var is_fighting = false
 
@@ -27,9 +27,10 @@ func _process(delta: float) -> void:
 	$HP_display.ES = ES
 	
 	if HP <= 0:
-		if opponent != null:
-			opponent.opponent = null
-			opponent.is_fighting = false
+		if len(opponents) > 0:
+			for opponent in opponents:
+				opponent.opponent = null
+				opponent.is_fighting = false
 		# 通知主场景增加能量
 		get_parent().energy += value
 		# 从敌人数组中移除自己
@@ -39,15 +40,16 @@ func _process(delta: float) -> void:
 	
 	# 检查是否到达最后一个检查点
 	if check_point >= get_parent().paths[path_index].size():
+		print(len(opponents))
 		# 扣除防御点数
 		get_parent().defensePoints -= defensePoint
 		# 从敌人数组中移除自己
 		get_parent().enemies.erase(self)
 		# 销毁自己
 		queue_free()
-	if $Timer.is_stopped() and is_fighting and opponent != null:
+	if $Timer.is_stopped() and is_fighting and len(opponents) > 0:
 		$Timer.start()
-		opponent.HP -= damage * (1 - opponent.DEF)
+		opponents[0].HP -= damage * (1 - opponents[0].DEF)
 
 func init_enemy_type(type):
 	sprite = type.instantiate()

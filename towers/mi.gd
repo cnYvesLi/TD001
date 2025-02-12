@@ -1,6 +1,6 @@
 extends Area2D
 var level = 1
-var d_range = [3000, 4000, 5000]
+var d_range = [900, 900, 900]
 var damage = [30, 40, 50]
 var damage_speed = [1.2, 1.5, 1.7]
 var enemies_in_range = {}

@@ -132,13 +132,13 @@ func update_enemies_position(delta: float) -> void:
 		# 检查每个炮塔与敌人的距离
 		for tower in towers:
 			if tower.type:  # 确保炮塔有类型
-				var distance = enemy.position.distance_to(tower.position)
+				var distance = enemy.global_position.distance_to(tower.global_position)
 				if distance <= tower.type.d_range[tower.level - 1]:
 					# 将敌人及其到终点的距离添加到炮塔的检测范围内
 					tower.type.enemies_in_range[enemy] = enemy.dis2final
 		
 		# 原有的移动逻辑
-		if enemy.opponent == null:
+		if not enemy.is_fighting:
 			var target = paths[enemy.path_index][enemy.check_point].position
 			var direction = target - enemy.position
 			var distance = direction.length()
