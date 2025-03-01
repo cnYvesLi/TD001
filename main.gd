@@ -11,6 +11,7 @@ var enemy_scene = preload("res://enemies/001.tscn")  # 预加载敌人场景
 var enemies = []  # 存储所有敌人实例的数组
 var energy_label 
 var defense_label  # 新增防御点数标签变量
+var p1_distance = 200
 @onready var p1_satellites = [$Tower, $Tower2, $Tower3]
 @onready var p1 = $p1
 @onready var offset_planets = {p1:0}
@@ -63,7 +64,7 @@ func _process(delta: float) -> void:
 	change_tower_stage()
 	spawn_enemies()
 	update_enemies_position(delta)  # 添加更新敌人位置的调用
-	relocate(p1, p1_satellites, 250)
+	relocate(p1, p1_satellites, p1_distance)
 	# 更新标签文本
 	energy_label.text = "Energy: " + str(energy)
 	defense_label.text = "Defense: " + str(defensePoints)  # 更新防御点数显示
@@ -77,9 +78,9 @@ func relocate(planet, satellites, distance):
 	var num_satellites = satellites.size()
 	for i in range(num_satellites):
 		var angle = (i * 2 * PI) / num_satellites  # 计算每个卫星的角度
-		var x = planet.position.x + distance * cos(angle + offset_planets[planet])  # 计算 x 坐标
-		var y = planet.position.y + distance * sin(angle + offset_planets[planet])  # 计算 y 坐标
-		satellites[i].position = Vector2(x, y)  # 设置卫星位置
+		var x = planet.global_position.x + distance * cos(angle + offset_planets[planet])  # 计算 x 坐标
+		var y = planet.global_position.y + distance * sin(angle + offset_planets[planet])  # 计算 y 坐标
+		satellites[i].global_position = Vector2(x, y)  # 设置卫星位置
 
 func locking():
 	for i in range(towers.size()):

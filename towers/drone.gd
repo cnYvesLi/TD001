@@ -12,6 +12,7 @@ var is_fighting = false
 var DEF = 0.1
 var initial_scale = {"x":0, "y":0}
 var parent
+var is_resting
 @onready var bar = $HP_bar
 
 # Called when the node enters the scene tree for the first time.
@@ -37,6 +38,7 @@ func _process(delta: float) -> void:
 			opponent.HP -= damage * (1 - opponent.DEF)
 	if visible:
 		if opponent != null:
+			is_resting = false
 			# 计算目标位置（敌人位置x坐标+100）
 			var target_pos = opponent.sprite.global_position
 			target_pos.x -= 250 * (opponent.scale.x)
@@ -56,6 +58,7 @@ func _process(delta: float) -> void:
 				if (target_pos.x - global_position.x > 0 and scale.x > 0) or (target_pos.x - global_position.x < 0 and scale.x < 0):
 					scale.x = -scale.x
 			else:
+				is_resting = true
 				global_position = target_pos
 				if scale.x < 0:
 					scale.x = -scale.x

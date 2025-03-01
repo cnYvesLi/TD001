@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bk1txdjc2kpk0"]
+[gd_scene load_steps=5 format=3 uid="uid://bk1txdjc2kpk0"]
 
 [ext_resource type="Script" path="res://enemies/enemy.gd" id="1_d01q2"]
 [ext_resource type="PackedScene" uid="uid://o5bpvpnshsem" path="res://enemies/HP.tscn" id="2_8qg82"]
+[ext_resource type="Texture2D" uid="uid://d0554f00wpqh6" path="res://sprites/001.png" id="3_aa7q8"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2n6k0"]
 radius = 124.0
@@ -18,3 +19,7 @@ position = Vector2(0, 65)
 scale = Vector2(0.45, 0.3)
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_aa7q8")

@@ -1,19 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://dd84sd27dtpd8"]
+[gd_scene load_steps=8 format=3 uid="uid://dd84sd27dtpd8"]
 
 [ext_resource type="Texture2D" uid="uid://i85gmrxxr5o3" path="res://sprites/Sol-III.png" id="1_4besh"]
 [ext_resource type="Script" path="res://main.gd" id="1_y0amh"]
 [ext_resource type="PackedScene" uid="uid://bbgbtysnt13nu" path="res://tower.tscn" id="2_lp1c8"]
+[ext_resource type="Texture2D" uid="uid://bqhfw4r4wkerk" path="res://sprites/Sol-II.png" id="3_bep0q"]
 [ext_resource type="Texture2D" uid="uid://b8qiqjuxgetq2" path="res://sprites/Checkpoint.png" id="4_uwusc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jrsu3"]
 radius = 62.9682
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_pcceq"]
+radius = 67.0075
+
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_y0amh")
 
 [node name="p1" type="Area2D" parent="."]
-position = Vector2(2300, 1300)
-scale = Vector2(1.2, 1.2)
+position = Vector2(2000, 1300)
+scale = Vector2(0.9, 0.9)
 
 [node name="Sol-iii" type="Sprite2D" parent="p1"]
 scale = Vector2(0.15, 0.15)
@@ -22,14 +26,26 @@ texture = ExtResource("1_4besh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="p1"]
 shape = SubResource("CircleShape2D_jrsu3")
 
+[node name="p2" type="Area2D" parent="."]
+scale = Vector2(0.9, 0.9)
+
+[node name="Sprite2D" type="Sprite2D" parent="p2"]
+position = Vector2(2854.44, 1090)
+scale = Vector2(0.164492, 0.164492)
+texture = ExtResource("3_bep0q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="p2"]
+position = Vector2(2853.33, 1086.67)
+shape = SubResource("CircleShape2D_pcceq")
+
 [node name="Tower" parent="." instance=ExtResource("2_lp1c8")]
-position = Vector2(2493, 1223)
+position = Vector2(480, 1406)
 
 [node name="Tower2" parent="." instance=ExtResource("2_lp1c8")]
-position = Vector2(2229, 1107)
+position = Vector2(364, 1404)
 
 [node name="Tower3" parent="." instance=ExtResource("2_lp1c8")]
-position = Vector2(2114, 1373)
+position = Vector2(250, 1404)
 
 [node name="Defense" type="Label" parent="."]
 offset_left = 46.0
@@ -60,5 +76,5 @@ position = Vector2(1146, 970)
 texture = ExtResource("4_uwusc")
 
 [node name="Checkpoint4" type="Sprite2D" parent="."]
-position = Vector2(2300, 1301)
+position = Vector2(2002, 1300)
 texture = ExtResource("4_uwusc")

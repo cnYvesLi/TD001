@@ -20,6 +20,7 @@ func _ready() -> void:
 	$Timer.timeout.connect(_on_timer_timeout)
 	$Timer.one_shot = false
 	$Timer.start()
+	$Sprite2D.visible = false
 
 func _process(delta: float) -> void:
 	$Timer.wait_time = 1 / damage_speed

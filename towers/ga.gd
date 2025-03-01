@@ -77,7 +77,7 @@ func _process(delta: float) -> void:
 		if i <= len(drones) - 1:
 			lights[i].visible = true
 			drones[i].standby_pos = pos[i + 1].global_position
-			if not drones[i].is_fighting and  drones[i].opponent == null:
+			if not drones[i].is_fighting and  drones[i].opponent == null and drones[i].is_resting:
 				drones[i].global_position = drones[i].standby_pos
 		else:
 			lights[i].visible = false
@@ -122,6 +122,7 @@ func _process(delta: float) -> void:
 					new_drone.speed = speed[level - 1]
 					new_drone.global_position = pos[len(drones)].global_position
 					new_drone.visible = false
+					new_drone.is_resting = true
 				elif len(drones) > 0 and gate_animation_frame <= 9:
 					# 在9帧内平滑向上移动400单位
 					var start_pos = pos[0].position
